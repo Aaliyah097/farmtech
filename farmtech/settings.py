@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+
+load_dotenv(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,13 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-=-902evplrs_$vy_yjt+3zes@o=$^*f_)+85iwwsh^h0p!w_-c"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "127.0.0.1",
+    "127.0.0.1", "0.0.0.0", "10.0.1.11"
 ]
 
 
@@ -45,7 +49,9 @@ INSTALLED_APPS = [
 
     'rest_framework_simplejwt',
     "mptt",
+
     "src.users",
+    "src.orders",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -90,11 +96,11 @@ WSGI_APPLICATION = "farmtech.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "postgres",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
     }
 }
 
