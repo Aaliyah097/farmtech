@@ -1,7 +1,7 @@
 from django.db.models import QuerySet
 
-from src.orders.models import OrdersFiles
 from farmtech.base_repo import Repository
+from src.orders.models import OrdersFiles
 
 
 class OrdersFilesRepository(Repository):

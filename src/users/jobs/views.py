@@ -1,9 +1,9 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from src.users.jobs.filters import JobsFilter
 from src.users.jobs.repo import JobsRepository
 from src.users.jobs.serializers import JobsSerializer
-from src.users.jobs.filters import JobsFilter
 
 
 class JobsView(ModelViewSet):

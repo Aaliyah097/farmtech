@@ -1,9 +1,9 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from src.users.departments.filters import DepartmentsFilter
 from src.users.departments.repo import DepartmentsRepository
 from src.users.departments.serializers import DepartmentsSerializer
-from src.users.departments.filters import DepartmentsFilter
 
 
 class DepartmentsView(ModelViewSet):

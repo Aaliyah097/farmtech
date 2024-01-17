@@ -4,7 +4,6 @@ from src.users.departments.views import DepartmentsView
 from src.users.jobs.views import JobsView
 from src.users.users.views import UsersView
 
-
 users_router = SimpleRouter()
 users_router.register("users", UsersView)
 

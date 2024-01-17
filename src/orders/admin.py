@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from src.orders.models import Orders, OrdersFiles
 
 # Register your models here.
@@ -16,4 +17,6 @@ class AdminTabularOrderFile(admin.TabularInline):
 @admin.register(Orders)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Orders._meta.fields]
-    inlines = [AdminTabularOrderFile, ]
+    inlines = [
+        AdminTabularOrderFile,
+    ]
