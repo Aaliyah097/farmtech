@@ -7,7 +7,7 @@ orders_router = SimpleRouter()
 orders_router.register("orders", OrdersView)
 
 files_router = SimpleRouter()
-files_router.register("orders/files", OrdersFilesView)
+files_router.register("orders-files", OrdersFilesView)
 
 
 urlpatterns = []
