@@ -13,12 +13,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Departments)
 class DepartmentAdmin(DraggableMPTTAdmin):
-    list_display = [
-        "tree_actions",
-        "indented_title",
-        "id",
-        "name",
-    ]
+    list_display = ["tree_actions", "indented_title", "id", "name", "manager"]
 
 
 @admin.register(Jobs)

@@ -20,6 +20,10 @@ class OrdersView(ModelViewSet):
     ]
 
     def create(self, request, *args, **kwargs):
+        """
+        В теле запроса можно передавать файлы.
+        Они будут сохранены и прикреплены к заявке
+        """
         new_order = self.serializer_class(data=request.data)
         if not new_order.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST, data=new_order.errors)

@@ -34,12 +34,14 @@ class User(AbstractUser):
 
 
 class Departments(MPTTModel):
-    name = models.CharField(verbose_name="Название", max_length=150, unique=True)
+    name = models.CharField(
+        verbose_name="Название", max_length=150, unique=True, blank=True
+    )
     parent: "Departments" = TreeForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
     staff = models.ManyToManyField(
-        to=User, verbose_name="Сотрудники", related_name="department"
+        to=User, verbose_name="Сотрудники", related_name="department", blank=True
     )
     manager = models.ForeignKey(
         to=User,
