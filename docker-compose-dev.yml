@@ -4,7 +4,7 @@ services:
     container_name: postgres-farm-tech-db
     image: postgres:15-alpine
     env_file:
-      - .env
+      - dev.env
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
@@ -23,7 +23,7 @@ services:
       - "6379:6379"
     networks:
       - local_network
-#  web:
+#d  web:
 #    build:
 #      context: .
 #      dockerfile: Dockerfile

@@ -16,7 +16,6 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv(".env")
 logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,6 +30,9 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+load_dotenv("dev.env") if DEBUG else load_dotenv(".env")
+
 
 ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "10.0.1.11"]
 
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     "mptt",
     "src.users",
     "src.orders",
+    'src.reports'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True

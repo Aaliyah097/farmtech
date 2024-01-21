@@ -43,4 +43,5 @@ urlpatterns = [
     path("", include("src.users.urls")),
     path("auth/", include("src.auth.urls")),
     path("", include("src.orders.urls")),
+    path("", include('src.reports.urls'))
 ]
