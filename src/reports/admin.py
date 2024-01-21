@@ -1,5 +1,7 @@
 from django.contrib import admin
-from src.reports.models import *
+
+from src.reports.models import AccountingTransactions, BalanceSheetItems, FinancialReports
+
 # Register your models here.
 
 
@@ -20,4 +22,6 @@ class TabularAccountingTransaction(admin.TabularInline):
 @admin.register(FinancialReports)
 class AdminFinancialReports(admin.ModelAdmin):
     list_display = [field.name for field in FinancialReports._meta.fields]
-    inlines = [TabularAccountingTransaction, ]
+    inlines = [
+        TabularAccountingTransaction,
+    ]

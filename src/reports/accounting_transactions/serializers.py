@@ -1,11 +1,15 @@
 from rest_framework import serializers
-from src.reports.models import AccountingTransactions, BalanceSheetItems
+
 from src.reports.balance_items.serializers import BalanceItemsSerializer
+from src.reports.models import AccountingTransactions, BalanceSheetItems
 
 
 class AccountingTransactionsSerializer(serializers.ModelSerializer):
     balance_sheet_item = serializers.PrimaryKeyRelatedField(
-        write_only=True, required=False, many=False, queryset=BalanceSheetItems.objects.all()
+        write_only=True,
+        required=False,
+        many=False,
+        queryset=BalanceSheetItems.objects.all(),
     )
     balance_sheet_item_info = serializers.SerializerMethodField(read_only=True)
 
@@ -15,4 +19,4 @@ class AccountingTransactionsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AccountingTransactions
-        fields = '__all__'
+        fields = "__all__"
