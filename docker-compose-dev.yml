@@ -23,19 +23,6 @@ services:
       - "6379:6379"
     networks:
       - local_network
-#d  web:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    volumes:
-#      - .:/code
-#    ports:
-#      - "8000:8000"
-#    depends_on:
-#      - redis
-#      - postgres
-#    networks:
-#      - local_network
 networks:
   local_network:
     driver: bridge

@@ -9,6 +9,7 @@ class UsersSerializer(serializers.ModelSerializer):
     job = serializers.PrimaryKeyRelatedField(
         write_only=True, many=False, required=False, queryset=Jobs.objects.all()
     )
+    password = serializers.CharField(write_only=True)
 
     @staticmethod
     def get_job_info(obj):

@@ -4,7 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from farmtech.settings import logger
 from src.orders.order.filters import OrdersFilter
 from src.orders.order.repo import OrdersRepository
 from src.orders.order.serializers import OrdersSerializer
@@ -30,7 +29,6 @@ class OrdersView(ModelViewSet):
         new_order.save()
 
         for filename, file in request.FILES.items():
-            logger.info(f"file {filename}, {file}")
             OrdersRepository.append_files(new_order.instance, file)
 
         return Response(status=status.HTTP_201_CREATED, data=new_order.data)

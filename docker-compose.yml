@@ -23,19 +23,33 @@ services:
       - "6379:6379"
     networks:
       - local_network
-#  web:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    volumes:
-#      - .:/code
-#    ports:
-#      - "8000:8000"
-#    depends_on:
-#      - redis
-#      - postgres
-#    networks:
-#      - local_network
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - local_network
+  nginx:
+#    restart: always
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./static:/srv/www/farmtech/static
+      - ./media:/srv/www/farmtech/media
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - web
+    networks:
+      - local_network
 networks:
   local_network:
     driver: bridge

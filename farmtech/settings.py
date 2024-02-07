@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import logging
 import os
 from pathlib import Path
+import platform
 
 from dotenv import load_dotenv
 
@@ -25,13 +26,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+DEBUG = True if "win" in platform.platform().lower() else False
+
+load_dotenv("dev.env") if DEBUG else load_dotenv(".env")
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-load_dotenv("dev.env") if DEBUG else load_dotenv(".env")
 
 
 ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "10.0.1.11"]
@@ -51,7 +53,8 @@ INSTALLED_APPS = [
     "mptt",
     "src.users",
     "src.orders",
-    'src.reports'
+    'src.reports',
+    "src.meetings"
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
