@@ -45,4 +45,5 @@ urlpatterns = [
     path("", include("src.orders.urls")),
     path("", include('src.reports.urls')),
     path("", include("src.meetings.urls")),
+    path("", include("src.news.urls")),
 ]

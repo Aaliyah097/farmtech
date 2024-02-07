@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     "src.users",
     "src.orders",
     'src.reports',
-    "src.meetings"
+    "src.meetings",
+    'src.news'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
