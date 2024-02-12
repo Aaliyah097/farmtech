@@ -5,12 +5,17 @@ from string import digits
 from django.core.mail import send_mail
 
 from farmtech.redis_connector import RedisConnector
-from src.auth.signup.exceptions import InvalidNonceException
+from src.auth2.signup.exceptions import InvalidNonceException
 from src.users.users.repo import UsersRepository
 
 
 class SignUpService:
     users_repo = UsersRepository()
+    INVITE_CODE_TTL = 60 * 60 * 24 * 3
+
+    @staticmethod
+    def otp():
+        return SignUpService._make_code()
 
     @staticmethod
     def _make_code() -> str:
@@ -29,7 +34,7 @@ class SignUpService:
 
         with RedisConnector() as cache:
             cache.set(nonce, user_id)
-            cache.expire(nonce, 60 * 5)
+            cache.expire(nonce, self.INVITE_CODE_TTL)
 
         return nonce
 

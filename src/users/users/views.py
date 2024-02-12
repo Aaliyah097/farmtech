@@ -13,3 +13,4 @@ class UsersView(ModelViewSet):
     permission_classes = [
         IsAuthenticated,
     ]
+    search_fields = ["first_name", "last_name", "middle_name", "job__name"]

@@ -20,3 +20,10 @@ class UsersRepository:
             return User.objects.create_user(
                 email=email, username=username, password=password, is_active=False
             ).id
+
+    @staticmethod
+    def get_by_email(email: str):
+        try:
+            return User.objects.get(email=email)
+        except User.DoesNotExist:
+            return None

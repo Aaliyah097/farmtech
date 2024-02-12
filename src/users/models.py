@@ -32,6 +32,15 @@ class User(AbstractUser):
         verbose_name="Телефон", max_length=25, default=None, blank=True, null=True
     )
 
+    def main_department(self):
+        main_department, min_level = None, float("inf")
+        for dep in self.departments.all():
+            level = dep.get_level()
+            if level < min_level:
+                main_department = dep
+                min_level = level
+        return main_department, min_level
+
 
 class Departments(MPTTModel):
     name = models.CharField(
@@ -41,7 +50,7 @@ class Departments(MPTTModel):
         "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
     )
     staff = models.ManyToManyField(
-        to=User, verbose_name="Сотрудники", related_name="department", blank=True
+        to=User, verbose_name="Сотрудники", related_name="departments", blank=True
     )
     manager = models.ForeignKey(
         to=User,

@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from src.auth.signup.serializer import ConfirmSerializer, SignupSerializer
-from src.auth.signup.service import SignUpService
+from src.auth2.signup.serializer import SignupSerializer
+from src.auth2.signup.service import SignUpService
 
 
 @swagger_auto_schema(
@@ -30,18 +30,13 @@ def signup(request):
 
 @swagger_auto_schema(
     method="post",
-    request_body=ConfirmSerializer,
     responses={
         200: openapi.Response("Учетная запись подтверждена"),
         400: openapi.Response("Некорректный одноразовый код"),
     },
 )
 @api_view(("POST",))
-def confirm(request):
-    payload = ConfirmSerializer(data=request.data)
-    if not payload.is_valid():
-        return Response(status=status.HTTP_400_BAD_REQUEST, data=payload.errors)
-    nonce = payload.validated_data.get("nonce")
+def confirm(request, nonce):
     SignUpService().confirm_user(nonce)
 
     return Response(status=status.HTTP_200_OK)

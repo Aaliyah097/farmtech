@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     "src.orders",
     'src.reports',
     "src.meetings",
-    'src.news'
+    'src.news',
+    'src.auth2',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -115,16 +116,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth2.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": "django.contrib.auth2.password_validation.MinimumLengthValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": "django.contrib.auth2.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": "django.contrib.auth2.password_validation.NumericPasswordValidator",
     },
 ]
 
