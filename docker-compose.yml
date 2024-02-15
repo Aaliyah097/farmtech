@@ -38,11 +38,12 @@ services:
     networks:
       - local_network
   nginx:
-#    restart: always
+    restart: always
     image: nginx:latest
     ports:
       - "80:80"
     volumes:
+      - ./logs:/srv/www/farmtech/logs
       - ./static:/srv/www/farmtech/static
       - ./media:/srv/www/farmtech/media
       - ./nginx:/etc/nginx/conf.d
