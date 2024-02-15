@@ -31,6 +31,9 @@ class User(AbstractUser):
     phone = models.CharField(
         verbose_name="Телефон", max_length=25, default=None, blank=True, null=True
     )
+    company = models.CharField(
+        verbose_name="Компания", max_length=50, default=None, blank=True, null=True
+    )
 
     def main_department(self):
         main_department, min_level = None, float("inf")

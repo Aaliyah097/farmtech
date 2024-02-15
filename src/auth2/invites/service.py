@@ -24,6 +24,7 @@ class InvitesService:
         user = UsersRepository.get_by_email(invite.email)
         user.departments.add(invite.department)
         user.job = invite.job
+        user.phone = invite.phone
 
         user.save()
 

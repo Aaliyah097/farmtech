@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -18,6 +19,36 @@ class FinancialReportsView(ModelViewSet):
     permission_classes = [
         IsAuthenticated,
     ]
+
+    @action(
+        methods=[
+            "POST",
+        ],
+        detail=True,
+        url_path="lock",
+    )
+    def lock(self, request, pk):
+        report = FinancialReportsRepository.get_by_id(pk)
+        if not report:
+            return Response(status=status.HTTP_404_NOT_FOUND, data="Отчет не найден")
+        report.is_locked = True
+        report.save()
+        return Response(status=status.HTTP_200_OK)
+
+    @action(
+        methods=[
+            "POST",
+        ],
+        detail=True,
+        url_path="unlock",
+    )
+    def unlock(self, request, pk):
+        report = FinancialReportsRepository.get_by_id(pk)
+        if not report:
+            return Response(status=status.HTTP_404_NOT_FOUND, data="Отчет не найден")
+        report.is_locked = False
+        report.save()
+        return Response(status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         """

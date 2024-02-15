@@ -10,6 +10,9 @@ class Invites(models.Model):
         ("rejected", "Отклонена"),
     )
     email = models.EmailField(verbose_name="Email", unique=True)
+    phone = models.CharField(
+        verbose_name="Телефон", max_length=20, default=None, blank=True, null=True
+    )
     status = models.CharField(
         verbose_name="Статус",
         max_length=50,
@@ -23,6 +26,15 @@ class Invites(models.Model):
         verbose_name="Пригласивший",
         to=User,
         related_name="invites",
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.CASCADE,
+    )
+    manager = models.ForeignKey(
+        verbose_name="Начальник",
+        to=User,
+        related_name="invites_manager",
         blank=True,
         null=True,
         default=None,
