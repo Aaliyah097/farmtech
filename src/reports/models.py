@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 
+from farmtech.errors import UnableChangeLockedReport
 from src.users.models import User
 
 # Create your models here.
@@ -37,6 +38,7 @@ class FinancialReports(models.Model):
     )
     period_begin = models.DateField(verbose_name="Начало периода")
     period_end = models.DateField(verbose_name="Конец периода")
+    is_locked = models.BooleanField(verbose_name="Заблокирован", default=False)
 
     def __str__(self):
         return f"Финансовый ответ за период с {self.period_begin} по {self.period_end}"
@@ -63,6 +65,15 @@ class AccountingTransactions(models.Model):
     comment = models.TextField(
         verbose_name="Комментарий", default=None, blank=True, null=True
     )
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        if self.report.is_locked:
+            raise UnableChangeLockedReport()
+        super().save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
 
     def __str__(self):
         return (

@@ -9,6 +9,9 @@ from .models import Departments, Jobs, User
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = [field.name for field in User._meta.fields]
+    list_filter = [
+        "company",
+    ]
 
 
 @admin.register(Departments)

@@ -38,3 +38,10 @@ class InvitesView(ModelViewSet):
             return Response(status=error.status, data=error.data)
 
         return Response(status=status.HTTP_202_ACCEPTED, data={"nonce": nonce})
+
+    def create(self, request, *args, **kwargs):
+        payload = self.serializer_class(data=request.data, many=False)
+        if not payload.is_valid():
+            return Response(status=status.HTTP_401_UNAUTHORIZED, data=payload.errors)
+        payload.save(user=request.user)
+        return Response(status=status.HTTP_201_CREATED, data=payload.data)

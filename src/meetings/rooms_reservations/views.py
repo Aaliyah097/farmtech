@@ -30,6 +30,7 @@ class MeetingRoomsReservationsView(ModelViewSet):
         if not MeetingRoomsReservationsRepository.is_time_free(
             serializer.validated_data.get("date_begin"),
             serializer.validated_data.get("date_end"),
+            serializer.validated_data.get("room").id,
         ):
             return Response(status=400, data="Переговорная на это время занята")
         return super().create(request, *args, **kwargs)

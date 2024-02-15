@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from src.meetings.models import MeetingRoomsReservations
+from src.meetings.metting_rooms.serializers import MeetingRoomsSerializer
+from src.meetings.models import MeetingRooms, MeetingRoomsReservations
 from src.users.models import User
 from src.users.users.serializers import UsersSerializer
 
@@ -13,6 +14,15 @@ class MeetingRoomsReservationsSerializer(serializers.ModelSerializer):
         write_only=True, required=True, many=False, queryset=User.objects.all()
     )
     user_info = serializers.SerializerMethodField(read_only=True)
+
+    room = serializers.PrimaryKeyRelatedField(
+        write_only=True, required=True, many=False, queryset=MeetingRooms.objects.all()
+    )
+    room_info = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_room_info(obj):
+        return MeetingRoomsSerializer(obj.room).data
 
     @staticmethod
     def get_user_info(obj):
