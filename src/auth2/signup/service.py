@@ -2,9 +2,8 @@ import os
 import random
 from string import digits
 
-from django.core.mail import send_mail
-
 from farmtech.redis_connector import RedisConnector
+from farmtech.mail_provider import send_email
 from src.auth2.signup.exceptions import InvalidNonceException
 from src.users.users.repo import UsersRepository
 
@@ -40,11 +39,10 @@ class SignUpService:
 
     @staticmethod
     def _send_confirmation_email(email: str, nonce: str):
-        send_mail(
+        send_email(
             subject="Подтверждение регистрации",
-            message=f"Код подтверждения: {nonce}",
-            from_email=os.environ.get("EMAIL_SENDER"),
-            recipient_list=[email],
+            message=os.environ.get("ACCOUNT_CONFIRM_ADDRES") % nonce,
+            recipients=[email],
         )
 
     def confirm_user(self, nonce: str):

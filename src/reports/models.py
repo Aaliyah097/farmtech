@@ -39,6 +39,7 @@ class FinancialReports(models.Model):
     period_begin = models.DateField(verbose_name="Начало периода")
     period_end = models.DateField(verbose_name="Конец периода")
     is_locked = models.BooleanField(verbose_name="Заблокирован", default=False)
+    is_confirmed = models.BooleanField(verbose_name='Подтвердить', default=False)
 
     def __str__(self):
         return f"Финансовый ответ за период с {self.period_begin} по {self.period_end}"
