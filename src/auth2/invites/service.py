@@ -22,9 +22,12 @@ class InvitesService:
         invite.save()
 
         user = UsersRepository.get_by_email(invite.email)
-        user.departments.add(invite.department)
-        user.job = invite.job
-        user.phone = invite.phone
+        if invite.department:
+            user.departments.add(invite.department)
+        if invite.job:
+            user.job = invite.job
+        if invite.phone:
+            user.phone = invite.phone
 
         user.save()
 
