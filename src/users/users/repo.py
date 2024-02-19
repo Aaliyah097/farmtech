@@ -27,3 +27,9 @@ class UsersRepository:
             return User.objects.get(email=email)
         except User.DoesNotExist:
             return None
+
+    @staticmethod
+    def change_password(email: str, password: str):
+        user = User.objects.get(email=email)
+        user.set_password(password)
+        user.save()

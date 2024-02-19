@@ -4,7 +4,11 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from src.auth2.signup.serializer import SignupSerializer
+from src.auth2.signup.serializer import (
+    ChangePasswordSerializer,
+    InitChangePasswordSerializer,
+    SignupSerializer,
+)
 from src.auth2.signup.service import SignUpService
 
 
@@ -40,3 +44,41 @@ def confirm(request, nonce):
     SignUpService().confirm_user(nonce)
 
     return Response(status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method="POST",
+    request_body=InitChangePasswordSerializer,
+    responses={
+        200: openapi.Response("Письмо для сброса пароля отправлено на почту"),
+        400: openapi.Response("Не передан email"),
+    },
+)
+@api_view(("POST",))
+def init_change_password(request):
+    payload = InitChangePasswordSerializer(data=request.data)
+    if not payload.is_valid():
+        return Response(status=status.HTTP_400_BAD_REQUEST, data="Не передан email")
+    nonce = SignUpService().init_change_password(payload.validated_data.get("email"))
+    return Response(status=status.HTTP_200_OK, data=nonce)
+
+
+@swagger_auto_schema(
+    method="POST",
+    request_body=ChangePasswordSerializer,
+    responses={
+        200: openapi.Response("Пароль успешно изменен"),
+        400: openapi.Response("Некорректный одноразовый код"),
+    },
+)
+@api_view(("POST",))
+def confirm_change_password(request):
+    payload = ChangePasswordSerializer(data=request.data)
+    if not payload.is_valid():
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=payload.errors)
+    SignUpService().confirm_password_change(
+        payload.validated_data.get("nonce"), payload.validated_data.get("password")
+    )
+    return Response(
+        status=status.HTTP_200_OK,
+    )

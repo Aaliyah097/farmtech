@@ -2,8 +2,8 @@ import os
 import random
 from string import digits
 
-from farmtech.redis_connector import RedisConnector
 from farmtech.mail_provider import send_email
+from farmtech.redis_connector import RedisConnector
 from src.auth2.signup.exceptions import InvalidNonceException
 from src.users.users.repo import UsersRepository
 
@@ -11,6 +11,7 @@ from src.users.users.repo import UsersRepository
 class SignUpService:
     users_repo = UsersRepository()
     INVITE_CODE_TTL = 60 * 60 * 24 * 3
+    PASSWORD_REFRESH_CODE_TTL = 60 * 15
 
     @staticmethod
     def otp():
@@ -45,11 +46,39 @@ class SignUpService:
             recipients=[email],
         )
 
+    @staticmethod
+    def _send_password_change_email(email, nonce: str):
+        send_email(
+            subject="Подверждение сброса пароля",
+            message=os.environ.get("PASSWORD_CHANGE_ADDRESS") % nonce,
+            recipients=[email],
+        )
+
     def confirm_user(self, nonce: str):
         with RedisConnector() as cache:
             user_id = cache.get(nonce)
-            cache.delete(nonce)
             if not user_id:
                 raise InvalidNonceException()
+            cache.delete(nonce)
 
         self.users_repo.activate_user(user_id)
+
+    def init_change_password(self, email: str) -> str:
+        nonce = self._make_code()
+        with RedisConnector() as cache:
+            cache.set(nonce, email)
+            cache.expire(nonce, self.PASSWORD_REFRESH_CODE_TTL)
+
+        self._send_password_change_email(email, nonce)
+        return nonce
+
+    def confirm_password_change(self, nonce: str, password: str):
+        if not password:
+            raise ValueError("Пароль не может быть пустым")
+
+        with RedisConnector() as cache:
+            email = cache.get(nonce)
+            if not email:
+                raise InvalidNonceException()
+            cache.delete(nonce)
+        self.users_repo.change_password(email.decode("utf-8"), password)

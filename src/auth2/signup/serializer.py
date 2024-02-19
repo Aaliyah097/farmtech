@@ -8,3 +8,12 @@ class SignupSerializer(serializers.Serializer):
 
 class ConfirmSerializer(serializers.Serializer):
     nonce = serializers.CharField()
+
+
+class InitChangePasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    nonce = serializers.CharField()
+    password = serializers.CharField()

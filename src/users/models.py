@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -16,6 +17,8 @@ class Jobs(models.Model):
 
 
 class User(AbstractUser):
+    email = models.EmailField(_("email address"), unique=True)
+
     middle_name = models.CharField(
         verbose_name="Отчетство", max_length=50, default=None, blank=True, null=True
     )
