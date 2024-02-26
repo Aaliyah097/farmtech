@@ -17,8 +17,10 @@ class UsersConfig(AppConfig):
     verbose_name = "Пользователи"
 
     def ready(self):
-        # if settings.DEBUG:
-        #     return
+        if settings.DEBUG:
+            return
+        from django.core.management import call_command
+        call_command('migrate', 'users')
 
         from src.users.models import Jobs, User
 
