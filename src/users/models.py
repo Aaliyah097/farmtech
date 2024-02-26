@@ -17,6 +17,11 @@ class Jobs(models.Model):
 
 
 class User(AbstractUser):
+    photo = models.ImageField(verbose_name='Фото',
+                              default=None, blank=True, null=True,
+                              upload_to='staff/photos')
+    birth_date = models.DateField(verbose_name='Дата рождения',
+                                  default=None, blank=True, null=True)
     email = models.EmailField(_("email address"), unique=True)
 
     middle_name = models.CharField(
