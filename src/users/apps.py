@@ -1,6 +1,7 @@
 import random
 from string import ascii_letters
 
+import django.db.utils
 import pandas as pd
 from django.apps import AppConfig
 
@@ -55,15 +56,19 @@ class UsersConfig(AppConfig):
                 pass
             else:
                 continue
-            user, is_created = User.objects.get_or_create(
-                username=username,
-                email=email,
-            )
+            try:
+                user, is_created = User.objects.get_or_create(
+                    username=username,
+                    email=email,
+                )
+            except django.db.utils.IntegrityError:
+                continue
+
             if is_created:
                 user.set_password(random_password())
-                user.first_name=first_name,
-                user.last_name=last_name,
-                user.middle_name=middle_name,
-                user.job=job,
-                user.company=organization,
+                user.first_name = first_name,
+                user.last_name = last_name,
+                user.middle_name = middle_name,
+                user.job = job,
+                user.company = organization,
                 user.save()
