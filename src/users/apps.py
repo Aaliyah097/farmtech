@@ -17,8 +17,8 @@ class UsersConfig(AppConfig):
     verbose_name = "Пользователи"
 
     def ready(self):
-        if settings.DEBUG:
-            return
+        # if settings.DEBUG:
+        #     return
 
         from src.users.models import Jobs, User
 
@@ -45,8 +45,15 @@ class UsersConfig(AppConfig):
                 middle_name = None
 
             job, _ = Jobs.objects.get_or_create(name=job)
+            username = email.split("@")[0]
+            try:
+                User.objects.get(username=username)
+            except User.DoesNotExist:
+                pass
+            else:
+                continue
             user, is_created = User.objects.get_or_create(
-                username=email.split("@")[0],
+                username=username,
                 email=email,
                 first_name=first_name,
                 last_name=last_name,
