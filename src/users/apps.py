@@ -66,9 +66,9 @@ class UsersConfig(AppConfig):
 
             if is_created:
                 user.set_password(random_password())
-                user.first_name = first_name,
-                user.last_name = last_name,
-                user.middle_name = middle_name,
-                user.job = job,
-                user.company = organization,
+                user.first_name = first_name
+                user.last_name = last_name
+                user.middle_name = middle_name
+                user.job = job
+                user.company = organization
                 user.save()
