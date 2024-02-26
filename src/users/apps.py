@@ -50,6 +50,7 @@ class UsersConfig(AppConfig):
             username = email.split("@")[0]
             try:
                 User.objects.get(username=username)
+                User.objects.get(email=email)
             except User.DoesNotExist:
                 pass
             else:
