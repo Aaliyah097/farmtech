@@ -58,12 +58,12 @@ class UsersConfig(AppConfig):
             user, is_created = User.objects.get_or_create(
                 username=username,
                 email=email,
-                first_name=first_name,
-                last_name=last_name,
-                middle_name=middle_name,
-                job=job,
-                company=organization,
             )
             if is_created:
                 user.set_password(random_password())
+                user.first_name=first_name,
+                user.last_name=last_name,
+                user.middle_name=middle_name,
+                user.job=job,
+                user.company=organization,
                 user.save()
