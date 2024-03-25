@@ -10,6 +10,13 @@ class UsersSerializer(serializers.ModelSerializer):
         write_only=True, many=False, required=False, queryset=Jobs.objects.all()
     )
     password = serializers.CharField(write_only=True)
+    vice_info = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_vice_info(obj):
+        if not obj.vice:
+            return None
+        return f"{obj.vice.last_name or ''} {obj.vice.first_name or ''} {obj.vice.middle_name or ''}"
 
     @staticmethod
     def get_job_info(obj):
