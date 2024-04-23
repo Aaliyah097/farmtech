@@ -21,7 +21,8 @@ class UsersConfig(AppConfig):
         if settings.DEBUG:
             return
         from django.core.management import call_command
-        call_command('migrate', 'users')
+
+        call_command("migrate", "users")
 
         from src.users.models import Jobs, User
 
