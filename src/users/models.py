@@ -17,11 +17,12 @@ class Jobs(models.Model):
 
 
 class User(AbstractUser):
-    photo = models.ImageField(verbose_name='Фото',
-                              default=None, blank=True, null=True,
-                              upload_to='staff/photos')
-    birth_date = models.DateField(verbose_name='Дата рождения',
-                                  default=None, blank=True, null=True)
+    photo = models.ImageField(
+        verbose_name="Фото", default=None, blank=True, null=True, upload_to="staff/photos"
+    )
+    birth_date = models.DateField(
+        verbose_name="Дата рождения", default=None, blank=True, null=True
+    )
     email = models.EmailField(_("email address"), unique=True)
 
     middle_name = models.CharField(
@@ -43,16 +44,16 @@ class User(AbstractUser):
         verbose_name="Компания", max_length=50, default=None, blank=True, null=True
     )
     status = models.CharField(
-        verbose_name='Статус', max_length=50, default=None, blank=True, null=True
+        verbose_name="Статус", max_length=50, default=None, blank=True, null=True
     )
     vice = models.ForeignKey(
-        'User',
-        verbose_name='Заместитель',
-        related_name='whose_vice',
+        "User",
+        verbose_name="Заместитель",
+        related_name="whose_vice",
         on_delete=models.SET_NULL,
         default=None,
         blank=True,
-        null=True
+        null=True,
     )
 
     def main_department(self):
