@@ -4,6 +4,18 @@ from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
 
+class Regions(models.Model):
+    name = models.CharField(verbose_name="Название", max_length=150, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = "ragions"
+        verbose_name = "Регион"
+        verbose_name_plural = "Регионы"
+
+
 class Jobs(models.Model):
     name = models.CharField(verbose_name="Название", max_length=150, unique=True)
 
@@ -14,6 +26,8 @@ class Jobs(models.Model):
         db_table = "jobs"
         verbose_name = "Должность"
         verbose_name_plural = "Должности"
+
+# TODO добавть столбец Регион и признак является ли пользователь менеджером своего региона
 
 
 class User(AbstractUser):
@@ -55,6 +69,17 @@ class User(AbstractUser):
         blank=True,
         null=True,
     )
+    region = models.ForeignKey(
+        to=Regions,
+        verbose_name='Регион',
+        default=None,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='users_in'
+    )
+    is_region_manager = models.BooleanField(
+        verbose_name="Менеджер региона", default=False)
 
     def main_department(self):
         main_department, min_level = None, float("inf")

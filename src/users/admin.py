@@ -1,7 +1,7 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 
-from .models import Departments, Jobs, User
+from .models import Departments, Jobs, User, Regions
 
 # Register your models here.
 
@@ -17,6 +17,11 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(Departments)
 class DepartmentAdmin(DraggableMPTTAdmin):
     list_display = ["tree_actions", "indented_title", "id", "name", "manager"]
+
+
+@admin.register(Regions)
+class RegionsAdmin(admin.ModelAdmin):
+    list_display = ["id", "name"]
 
 
 @admin.register(Jobs)
