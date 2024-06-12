@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from src.reports.models import AccountingTransactions, BalanceSheetItems, FinancialReports
+from src.reports.models import AccountingTransactions, BalanceSheetItems, FinancialReports, ItemsLimits
 
 # Register your models here.
 
@@ -25,3 +25,8 @@ class AdminFinancialReports(admin.ModelAdmin):
     inlines = [
         TabularAccountingTransaction,
     ]
+
+
+@admin.register(ItemsLimits)
+class AdminItemsLimits(admin.ModelAdmin):
+    list_display = [field.name for field in ItemsLimits._meta.fields]

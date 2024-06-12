@@ -5,6 +5,4 @@ from src.reports.models import BalanceSheetItems
 
 
 class BalanceItemsRepository(Repository):
-    @staticmethod
-    def get_qs() -> QuerySet:
-        return BalanceSheetItems.objects.all()
+    model = BalanceSheetItems

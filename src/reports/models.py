@@ -10,7 +10,7 @@ from src.users.models import User
 class BalanceSheetItems(models.Model):
     name = models.CharField(verbose_name="Наименование")
     direction = models.BooleanField(
-        verbose_name="Приход/расход", default=False, blank=True
+        verbose_name="Приход", default=False, blank=True
     )
 
     def __str__(self):
@@ -22,10 +22,34 @@ class BalanceSheetItems(models.Model):
         db_table = "balance_sheet_items"
 
 
-class FinancialReports(models.Model):
-    created_at = models.DateTimeField(
-        verbose_name="Дата создания", auto_now_add=True, blank=True
+class ItemsLimits(models.Model):
+    month = models.PositiveSmallIntegerField(verbose_name='Месяц', default=None)
+    year = models.PositiveSmallIntegerField(verbose_name='Год', default=None)
+    user = models.ForeignKey(
+        User,
+        verbose_name='Пользователь',
+        related_name='user_limits',
+        on_delete=models.CASCADE
     )
+    item = models.ForeignKey(
+        BalanceSheetItems,
+        verbose_name='Статья',
+        related_name='item_limits',
+        on_delete=models.CASCADE
+    )
+    limit = models.FloatField(verbose_name='Лимит', default=0)
+    comment = models.TextField(
+        verbose_name="Комментарий", default=None, blank=True, null=True
+    )
+
+    class Meta:
+        verbose_name = 'Лимиты статей'
+        verbose_name_plural = 'Лимиты статей'
+        db_table = 'items_limits'
+        unique_together = ('user', 'item', 'month', 'year')
+
+
+class FinancialReports(models.Model):
     updated_at = models.DateTimeField(verbose_name="Дата обновления", auto_now=True)
     author = models.ForeignKey(
         to=User,
@@ -36,18 +60,26 @@ class FinancialReports(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    period_begin = models.DateField(verbose_name="Начало периода")
-    period_end = models.DateField(verbose_name="Конец периода")
+    month = models.PositiveSmallIntegerField(verbose_name='Месяц', default=None)
+    year = models.PositiveSmallIntegerField(verbose_name='Год', default=None)
     is_locked = models.BooleanField(verbose_name="Заблокирован", default=False)
     is_confirmed = models.BooleanField(verbose_name="Подтвердить", default=False)
+    is_accounted = models.BooleanField(verbose_name='В бухгалтерии', default=False)
+
+    total_in = models.FloatField(verbose_name="Приход", default=0)
+    total_out = models.FloatField(verbose_name="Расход", default=0)
+    balance_on_begin = models.FloatField(
+        verbose_name='Остаток на начало периода', default=0)
+    balance_on_end = models.FloatField(verbose_name='Остаток на конец периода', default=0)
 
     def __str__(self):
-        return f"Финансовый ответ за период с {self.period_begin} по {self.period_end}"
+        return f"ФО {self.year}-{self.month}, {self.author.id}"
 
     class Meta:
         verbose_name = "Финансовый отчет"
         verbose_name_plural = "Финансовые отчеты"
         db_table = "financial_reports"
+        unique_together = ('month', 'year', 'author')
 
 
 class AccountingTransactions(models.Model):
@@ -66,15 +98,7 @@ class AccountingTransactions(models.Model):
     comment = models.TextField(
         verbose_name="Комментарий", default=None, blank=True, null=True
     )
-
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
-        if self.report.is_locked:
-            raise UnableChangeLockedReport()
-        super().save(
-            force_insert=False, force_update=False, using=None, update_fields=None
-        )
+    is_confirmed = models.BooleanField(verbose_name='Подтверждена', default=False)
 
     def __str__(self):
         return (
@@ -85,3 +109,6 @@ class AccountingTransactions(models.Model):
         verbose_name = "Проводка"
         verbose_name_plural = "Проводки"
         db_table = "accounting_transactions"
+
+
+# TODO confirm транзакции, чтобы цифры в отчете обновлялись только после конфирма, если сумма вышла за лимиты

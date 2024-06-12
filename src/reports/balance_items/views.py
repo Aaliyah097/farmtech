@@ -7,7 +7,7 @@ from src.reports.balance_items.serializers import BalanceItemsSerializer
 
 
 class BalanceItemsView(ModelViewSet):
-    queryset = BalanceItemsRepository.get_qs()
+    queryset = BalanceItemsRepository().get_qs()
     serializer_class = BalanceItemsSerializer
     filterset_class = BalanceItemsFilter
     permission_classes = [

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from farmtech import validators
 from src.reports.accounting_transactions.serializers import (
     AccountingTransactionsSerializer,
 )
@@ -16,6 +17,7 @@ class FinancialReportsSerializer(serializers.ModelSerializer):
         write_only=True, required=False, many=False, queryset=User.objects.all()
     )
     author_info = serializers.SerializerMethodField(read_only=True)
+    month = serializers.IntegerField(validators=[validators.validate_month])
 
     @staticmethod
     def get_author_info(obj):
