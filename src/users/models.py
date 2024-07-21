@@ -81,14 +81,23 @@ class User(AbstractUser):
     is_region_manager = models.BooleanField(
         verbose_name="Менеджер региона", default=False)
 
-    def main_department(self):
-        main_department, min_level = None, float("inf")
+    @property
+    def fio(self) -> str:
+        first_name = self.first_name or ""
+        middle_name = self.middle_name or ""
+        last_name = self.last_name or ""
+
+        return f"{last_name} {first_name} {middle_name}"
+
+    @property
+    def main_department(self) -> tuple['Departments', float]:
+        main_dep, min_level = None, float("inf")
         for dep in self.departments.all():
             level = dep.get_level()
             if level < min_level:
-                main_department = dep
+                main_dep = dep
                 min_level = level
-        return main_department, min_level
+        return main_dep, min_level
 
 
 class Departments(MPTTModel):

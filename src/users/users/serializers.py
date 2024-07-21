@@ -11,6 +11,9 @@ class UsersSerializer(serializers.ModelSerializer):
     )
     password = serializers.CharField(write_only=True)
     vice_info = serializers.SerializerMethodField(read_only=True)
+    department_info = serializers.SerializerMethodField(
+        'get_department_info', read_only=True
+    )
 
     @staticmethod
     def get_vice_info(obj):
@@ -22,6 +25,21 @@ class UsersSerializer(serializers.ModelSerializer):
     def get_job_info(obj):
         return JobsSerializer(obj.job).data
 
+    @staticmethod
+    def get_department_info(obj) -> dict:
+        main_dep, level = obj.main_department
+        if not main_dep:
+            return {}
+        return {
+            'id': main_dep.id,
+            'name': main_dep.name,
+            'manager': main_dep.manager.fio if main_dep.manager else None,
+        }
+
     class Meta:
         model = User
-        fields = "__all__"
+        fields = [field.name for field in User._meta.fields] + [
+            'department_info',
+            'job_info',
+            'vice_info'
+        ]
