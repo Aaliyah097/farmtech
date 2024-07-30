@@ -15,3 +15,18 @@ class ItemsLimitsView(ModelViewSet):
     permission_classes = [
         IsAuthenticated,
     ]
+
+    def create(self, request, *atgs, **kwargs):
+        new_items = self.serializer_class(data=request.data, many=True)
+        if not new_items.is_valid():
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data=new_items.errors
+            )
+
+        items = new_items.save()
+
+        return Response(
+            status=status.HTTP_201_CREATED,
+            data=self.serializer_class(instance=items, many=True).data
+        )

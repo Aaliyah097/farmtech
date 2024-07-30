@@ -19,11 +19,13 @@ class DepartmentsSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_manager_info(obj):
-        return UsersSerializer(obj.manager).data
+        return obj.manager.to_dict() if obj.manager else None
+        # return UsersSerializer(obj.manager).data
 
     @staticmethod
     def get_staff_info(obj):
-        return UsersSerializer(obj.staff, many=True).data
+        return [u.to_dict() for u in obj.staff.all()]
+        # return UsersSerializer(obj.staff, many=True).data
 
     class Meta:
         model = Departments

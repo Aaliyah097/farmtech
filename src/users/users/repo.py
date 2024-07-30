@@ -29,6 +29,13 @@ class UsersRepository:
             return None
 
     @staticmethod
+    def get_by_id(id_: int):
+        try:
+            return User.objects.get(id=id_)
+        except User.DoesNotExist:
+            return None
+
+    @staticmethod
     def change_password(email: str, password: str):
         user = User.objects.get(email=email)
         user.set_password(password)

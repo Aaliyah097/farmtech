@@ -89,6 +89,12 @@ class User(AbstractUser):
 
         return f"{last_name} {first_name} {middle_name}"
 
+    def to_dict(self) -> dict:
+        return {
+            'id': self.id,
+            'fio': self.fio
+        }
+
     @property
     def main_department(self) -> tuple['Departments', float]:
         main_dep, min_level = None, float("inf")
@@ -98,6 +104,12 @@ class User(AbstractUser):
                 main_dep = dep
                 min_level = level
         return main_dep, min_level
+
+    @property
+    def deps_in_control(self) -> list['Departments']:
+        return Departments.objects.filter(
+            manager__id=self.id
+        )
 
 
 class Departments(MPTTModel):
@@ -122,6 +134,12 @@ class Departments(MPTTModel):
 
     def __str__(self):
         return self.name
+
+    def to_dict(self) -> dict:
+        return {
+            'id': self.id,
+            'name': self.name
+        }
 
     class MPTTMeta:
         order_insertion_by = ["name"]
