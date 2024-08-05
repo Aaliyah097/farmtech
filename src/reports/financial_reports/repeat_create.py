@@ -13,6 +13,9 @@ def repeat_create():
             author=user
         ).last()
 
+        if prev_report and (prev_report.month == today.month and prev_report.year == today.year):
+            continue
+
         if prev_report:
             balance_on_begin = prev_report.balance_on_end
             prev_report.is_locked = True
@@ -26,7 +29,7 @@ def repeat_create():
             year=today.year,
             is_locked=False,
             is_confirmed=False,
-            in_accounting=False,
+            is_accounted=False,
             balance_on_begin=balance_on_begin
         )
         try:
@@ -34,5 +37,5 @@ def repeat_create():
                 new_report.save()
                 if prev_report:
                     prev_report.save()
-        except IntegrityError:
-            continue
+        except IntegrityError as e:
+            print(e)

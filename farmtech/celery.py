@@ -3,6 +3,7 @@ import os
 from celery import Celery
 from celery import shared_task
 from celery.schedules import crontab
+from celery.signals import celeryd_init
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'farmtech.settings')
@@ -10,6 +11,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'farmtech.settings')
 app = Celery('farmtech')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
+
+
+@celeryd_init.connect()
+def configure_app(conf=None, **kwargs):
+    pass
 
 
 @shared_task(name="repeat_create_new_month_finance_reports")
