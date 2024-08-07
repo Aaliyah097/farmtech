@@ -101,6 +101,11 @@ class AccountingTransactions(models.Model):
     is_confirmed = models.BooleanField(verbose_name='Подтверждена', default=False)
     is_accounting_confirmed = models.BooleanField(
         verbose_name='Подтверждено бухгалтерией', default=False)
+    accounting_comment = models.TextField(
+        verbose_name='Комментарий бухгалтера',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return (
