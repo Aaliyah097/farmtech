@@ -99,6 +99,8 @@ class AccountingTransactions(models.Model):
         verbose_name="Комментарий", default=None, blank=True, null=True
     )
     is_confirmed = models.BooleanField(verbose_name='Подтверждена', default=False)
+    is_accounting_confirmed = models.BooleanField(
+        verbose_name='Подтверждено бухгалтерией', default=False)
 
     def __str__(self):
         return (
