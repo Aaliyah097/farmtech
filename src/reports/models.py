@@ -104,7 +104,14 @@ class AccountingTransactions(models.Model):
     accounting_comment = models.TextField(
         verbose_name='Комментарий бухгалтера',
         blank=True,
-        null=True
+        null=True,
+        default=None
+    )
+    staff_comment = models.TextField(
+        verbose_name='Комментарий сотрудника',
+        blank=True,
+        null=True,
+        default=None
     )
 
     def __str__(self):
