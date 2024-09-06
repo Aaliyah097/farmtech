@@ -1,3 +1,4 @@
+import datetime
 from rest_framework import serializers
 
 from src.users.jobs.serializers import JobsSerializer
@@ -14,6 +15,17 @@ class UsersSerializer(serializers.ModelSerializer):
     department_info = serializers.SerializerMethodField(
         'get_department_info', read_only=True
     )
+
+    work_exp = serializers.SerializerMethodField(
+        'get_work_exp', read_only=True
+    )
+
+    @staticmethod
+    def get_work_exp(obj):
+        if not obj.employment_date:
+            return 0
+
+        return (datetime.date.today() - obj.employment_date).days
 
     @staticmethod
     def get_vice_info(obj):
@@ -41,5 +53,6 @@ class UsersSerializer(serializers.ModelSerializer):
         fields = [field.name for field in User._meta.fields] + [
             'department_info',
             'job_info',
-            'vice_info'
+            'vice_info',
+            'work_exp'
         ]

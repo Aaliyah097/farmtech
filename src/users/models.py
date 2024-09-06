@@ -80,6 +80,9 @@ class User(AbstractUser):
     )
     is_region_manager = models.BooleanField(
         verbose_name="Менеджер региона", default=False)
+    employment_date = models.DateField(
+        verbose_name='Дата приема на работу', default=None, blank=True, null=True
+    )
 
     @property
     def fio(self) -> str:

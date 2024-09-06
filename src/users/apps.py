@@ -1,8 +1,10 @@
 import random
+import datetime
 from string import ascii_letters
 
 import django.db.utils
 import pandas as pd
+import openpyxl
 from django.apps import AppConfig
 
 from farmtech import settings
@@ -18,6 +20,7 @@ class UsersConfig(AppConfig):
     verbose_name = "Пользователи"
 
     def ready(self):
+        return  # TODO
         from django.core.management import call_command
 
         call_command("migrate", "users")
@@ -26,6 +29,73 @@ class UsersConfig(AppConfig):
         self.load_departments()
         self.load_jobs()
         self.load_users_departments()
+
+        self.load_users_employment_date()
+
+        self.load_phone_numbers()
+
+    def load_phone_numbers(self):
+        from src.users.models import User
+
+        wb = openpyxl.load_workbook('Номера телефонов.xlsx')
+        sheet = wb.active
+
+        for row in range(5, sheet.max_row):
+            fio = sheet.cell(row, 2).value
+
+            if not fio:
+                continue
+            try:
+                last_name, first_name, middle_name = fio.split(" ")
+            except (ValueError, AttributeError):
+                continue
+
+            user = User.objects.filter(
+                first_name__iexact=first_name.lower().strip(),
+                last_name__iexact=last_name.lower().strip(),
+                middle_name__iexact=middle_name.lower().strip()
+            ).first()
+
+            if not user:
+                continue
+
+            phone = sheet.cell(row, 1).value
+            if not phone:
+                continue
+
+            user.phone = str(phone)
+            user.save()
+
+    def load_users_employment_date(self):
+        from src.users.models import User
+
+        wb = openpyxl.load_workbook('Сотрудники_дата_приема_город_15_04_2024.xlsx')
+        sheet = wb.active
+
+        for row in range(7, sheet.max_row):
+            fio = sheet.cell(row, 2).value
+
+            if not fio:
+                continue
+            try:
+                last_name, first_name, middle_name = fio.split(" ")
+            except (ValueError, AttributeError):
+                continue
+
+            user = User.objects.filter(
+                first_name__iexact=first_name.lower().strip(),
+                last_name__iexact=last_name.lower().strip(),
+                middle_name__iexact=middle_name.lower().strip()
+            ).first()
+
+            if not user:
+                continue
+
+            employment_date = sheet.cell(row, 5).value
+            employment_date = datetime.datetime.strptime(employment_date, '%d.%m.%Y')
+
+            user.employment_date = employment_date
+            user.save()
 
     def load_users_departments(self):
         from src.users.models import Departments, User, Jobs
