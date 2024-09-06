@@ -7,7 +7,6 @@ class ReportsConfig(AppConfig):
     verbose_name = "Отчеты"
 
     def ready(self):
-        return  # TODO
         from django.core.management import call_command
 
         call_command("migrate", 'reports')
