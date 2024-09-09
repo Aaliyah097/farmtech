@@ -66,3 +66,23 @@ class Trademarks(models.Model):
         db_table = "trademarks"
         verbose_name = "Товарный знак"
         verbose_name_plural = "Товарные знаки"
+
+
+class RequestsForms(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        default=None,
+        blank=True,
+        null=True,
+        verbose_name="Автор",
+        related_name="requests_forms",
+        on_delete=models.SET_NULL,
+    )
+    created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="Дата обновления", auto_now=True)
+    text = models.TextField(verbose_name="Текст", default=None, blank=True, null=True)
+
+    class Meta:
+        db_table = "requests_forms"
+        verbose_name = "Обращения через форму"
+        verbose_name_plural = "Обращения через форму"

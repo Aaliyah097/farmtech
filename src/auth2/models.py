@@ -65,6 +65,32 @@ class Invites(models.Model):
         on_delete=models.CASCADE,
     )
 
+    employment_date = models.DateField(
+        verbose_name='Дата приема на работу', default=None, blank=True, null=True
+    )
+    prev_eployee_fio = models.CharField(
+        verbose_name="ФИО предыдущего сотрудника",
+        default=None, blank=True, null=True, max_length=500
+    )
+    city = models.CharField(verbose_name='Город',
+                            default=None, blank=True, null=True, max_length=100)
+    promotion_direction = models.CharField(
+        verbose_name='Направление продвижения',
+        default=None, blank=True, null=True, max_length=500
+    )
+    address_1 = models.TextField(
+        verbose_name="Адрес для отправки пром материалов",
+        default=None, blank=True, null=True
+    )
+    address_2 = models.TextField(
+        verbose_name="Адресс для отправки СДЭК",
+        default=None, blank=True, null=True
+    )
+    comment_1 = models.TextField(
+        verbose_name="""Информации о необходимости выдачи корпоративное авто или компенсации расходов на содержание и амортизацию личного автомобиля""",
+        default=None, blank=True, null=True
+    )
+
     def __str__(self):
         return f"{self.get_status_display()} {self.email}"
 
