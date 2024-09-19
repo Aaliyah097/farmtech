@@ -1,6 +1,6 @@
 from django.db import models
 
-from src.users.models import Departments, Jobs, User
+from src.users.models import Departments, Jobs, User, Regions
 
 
 class Invites(models.Model):
@@ -43,8 +43,14 @@ class Invites(models.Model):
     on_date = models.DateField(
         verbose_name="Дата начала периода работы", default=None, blank=True, null=True
     )
-    region = models.CharField(
-        verbose_name="Регион", max_length=150, default=None, blank=True, null=True
+    region = models.ForeignKey(
+        to=Regions,
+        verbose_name='Регион',
+        default=None,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='invites_in'
     )
     department = models.ForeignKey(
         verbose_name="Отдел",
@@ -89,6 +95,24 @@ class Invites(models.Model):
     comment_1 = models.TextField(
         verbose_name="""Информации о необходимости выдачи корпоративное авто или компенсации расходов на содержание и амортизацию личного автомобиля""",
         default=None, blank=True, null=True
+    )
+    first_name = models.CharField(
+        verbose_name='Имя', default=None, blank=True, null=True, max_length=150
+    )
+    last_name = models.CharField(
+        verbose_name='Фамилия', default=None, blank=True, null=True, max_length=150
+    )
+    middle_name = models.CharField(
+        verbose_name='Отчество', default=None, blank=True, null=True, max_length=150
+    )
+    photo = models.ImageField(
+        verbose_name='Фото', default=None, blank=True, null=True, upload_to="invites/photos"
+    )
+    is_verified_by_hr = models.BooleanField(
+        verbose_name="Согласовано кадрами", default=False, blank=True, null=True
+    )
+    is_verified_by_accounts = models.BooleanField(
+        verbose_name="Согласовано бухгалтерией", default=False, blank=True, null=True
     )
 
     def __str__(self):

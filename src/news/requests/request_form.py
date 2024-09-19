@@ -32,7 +32,8 @@ def send_request_form(request):
         send_email(
             subject="Новое обращение через форму",
             message=text,
-            recipients=['info@lidex-group.ru', 'name.boltz@gmail.com'],
+            recipients=[os.environ.get(
+                "REQUEST_FORM_TO_SEND_EMAIL", 'name.boltz@gmail.com')],
             from_email=request.user.email or os.environ.get("EMAIL_SENDER")
         )
     except Exception as e:

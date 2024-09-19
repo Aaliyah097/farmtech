@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from src.auth2.invites.filters import InvitesFilter
 from src.auth2.invites.repo import InvitesRepository
@@ -18,6 +19,7 @@ class InvitesView(ModelViewSet):
     permission_classes = [
         IsAuthenticated,
     ]
+    parser_classes = (MultiPartParser, FormParser)
 
     @action(
         methods=[
@@ -25,6 +27,7 @@ class InvitesView(ModelViewSet):
         ],
         detail=True,
         url_path="confirm",
+        parser_classes=(JSONParser, )
     )
     def confirm(self, request, pk):
         if not has_level_permissions(request, 1):

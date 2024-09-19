@@ -1,3 +1,4 @@
+import datetime
 from typing import Union
 
 from farmtech.errors import Error
@@ -28,6 +29,23 @@ class InvitesService:
             user.job = invite.job
         if invite.phone:
             user.phone = invite.phone
+        if invite.photo:
+            user.photo = invite.photo
+
+        if invite.on_date:
+            user.employment_date = invite.on_date
+        else:
+            user.employment_date = datetime.date.today()
+
+        if invite.region:
+            user.region = invite.region
+
+        if invite.first_name:
+            user.first_name = invite.first_name
+        if invite.last_name:
+            user.last_name = invite.last_name
+        if invite.middle_name:
+            user.middle_name = invite.middle_name
 
         user.save()
 
