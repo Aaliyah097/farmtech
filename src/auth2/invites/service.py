@@ -46,6 +46,8 @@ class InvitesService:
             user.last_name = invite.last_name
         if invite.middle_name:
             user.middle_name = invite.middle_name
+        if invite.birth_date:
+            user.birth_date = invite.birth_date
 
         user.save()
 

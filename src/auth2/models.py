@@ -114,6 +114,9 @@ class Invites(models.Model):
     is_verified_by_accounts = models.BooleanField(
         verbose_name="Согласовано бухгалтерией", default=False, blank=True, null=True
     )
+    birth_date = models.DateField(
+        verbose_name='Дата рождения', default=None, blank=True, null=True
+    )
 
     def __str__(self):
         return f"{self.get_status_display()} {self.email}"
