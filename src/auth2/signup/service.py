@@ -2,7 +2,7 @@ import os
 import random
 from string import digits
 
-from farmtech.mail_provider import send_email
+from farmtech.mail_provider import send_email, MessageType
 from farmtech.redis_connector import RedisConnector
 from src.auth2.signup.exceptions import InvalidNonceException
 from src.users.users.repo import UsersRepository
@@ -44,6 +44,7 @@ class SignUpService:
             subject="Подтверждение регистрации",
             message=os.environ.get("ACCOUNT_CONFIRM_ADDRES") % nonce,
             recipients=[email],
+            message_type=MessageType.CONFIRM_REGISTRATION
         )
 
     @staticmethod
@@ -52,6 +53,7 @@ class SignUpService:
             subject="Подверждение сброса пароля",
             message=os.environ.get("PASSWORD_CHANGE_ADDRESS") % nonce,
             recipients=[email],
+            message_type=MessageType.PASSWORD_CHANGE
         )
 
     def confirm_user(self, nonce: str):
