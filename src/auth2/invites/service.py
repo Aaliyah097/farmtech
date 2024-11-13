@@ -23,6 +23,7 @@ class InvitesService:
         invite.save()
 
         user = UsersRepository.get_by_email(invite.email)
+
         if invite.department:
             user.departments.add(invite.department)
         if invite.job:
@@ -48,6 +49,24 @@ class InvitesService:
             user.middle_name = invite.middle_name
         if invite.birth_date:
             user.birth_date = invite.birth_date
+        if invite.company:
+            user.company = invite.company
+        if invite.manager:
+            user.manager = invite.manager
+        if invite.employment_date:
+            user.employment_date = invite.employment_date
+        if invite.prev_eployee_fio:
+            user.prev_eployee_fio = invite.prev_eployee_fio
+        if invite.city:
+            user.city = invite.city
+        if invite.promotion_direction:
+            user.promotion_direction = invite.promotion_direction
+        if invite.address_1:
+            user.address_1 = invite.address_1
+        if invite.address_2:
+            user.address_2 = invite.address_2
+        if invite.comment_1:
+            user.comment_1 = invite.comment_1
 
         user.save()
 

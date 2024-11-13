@@ -117,6 +117,9 @@ class Invites(models.Model):
     birth_date = models.DateField(
         verbose_name='Дата рождения', default=None, blank=True, null=True
     )
+    company = models.CharField(
+        verbose_name="Компания", max_length=50, default=None, blank=True, null=True
+    )
 
     def __str__(self):
         return f"{self.get_status_display()} {self.email}"

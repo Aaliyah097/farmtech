@@ -11,8 +11,7 @@ class NewsConfig(AppConfig):
     verbose_name = "Новости"
 
     def ready(self):
-        if settings.DEBUG:
-            return
+        return
 
         from django.core.management import call_command
 

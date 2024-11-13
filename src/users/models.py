@@ -69,6 +69,15 @@ class User(AbstractUser):
         blank=True,
         null=True,
     )
+    manager = models.ForeignKey(
+        "User",
+        verbose_name="Начальник",
+        related_name="who_manager",
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.SET_NULL,
+    )
     region = models.ForeignKey(
         to=Regions,
         verbose_name='Регион',
@@ -82,6 +91,31 @@ class User(AbstractUser):
         verbose_name="Менеджер региона", default=False)
     employment_date = models.DateField(
         verbose_name='Дата приема на работу', default=None, blank=True, null=True
+    )
+    prev_eployee_fio = models.CharField(
+        verbose_name="ФИО предыдущего сотрудника",
+        default=None, blank=True, null=True, max_length=500
+    )
+    on_date = models.DateField(
+        verbose_name="Дата начала периода работы", default=None, blank=True, null=True
+    )
+    city = models.CharField(verbose_name='Город',
+                            default=None, blank=True, null=True, max_length=100)
+    promotion_direction = models.CharField(
+        verbose_name='Направление продвижения',
+        default=None, blank=True, null=True, max_length=500
+    )
+    address_1 = models.TextField(
+        verbose_name="Адрес для отправки пром материалов",
+        default=None, blank=True, null=True
+    )
+    address_2 = models.TextField(
+        verbose_name="Адресс для отправки СДЭК",
+        default=None, blank=True, null=True
+    )
+    comment_1 = models.TextField(
+        verbose_name="""Информации о необходимости выдачи корпоративное авто или компенсации расходов на содержание и амортизацию личного автомобиля""",
+        default=None, blank=True, null=True
     )
 
     @property
