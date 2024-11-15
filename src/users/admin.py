@@ -1,7 +1,7 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 
-from .models import Departments, Jobs, User, Regions
+from .models import *
 
 # Register your models here.
 
@@ -30,3 +30,12 @@ class JobAdmin(admin.ModelAdmin):
         "id",
         "name",
     ]
+
+
+@admin.register(NotificationsRecipients)
+class NotificationsRecipientsAdmin(admin.ModelAdmin):
+    list_display = ['notification', 'get_recipients']
+
+    def get_recipients(self, obj):
+        return str(len(obj.recipients.all()))
+    get_recipients.short_description = 'Получатели'

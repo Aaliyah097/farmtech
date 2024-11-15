@@ -185,3 +185,21 @@ class Departments(MPTTModel):
         db_table = "departments"
         verbose_name = "Отдел"
         verbose_name_plural = "Отделы"
+
+
+class NotificationsRecipients(models.Model):
+    label = models.CharField(verbose_name='Название', max_length=150,
+                             default=None, blank=True, null=True)
+    notification = models.CharField(
+        verbose_name='Источник уведомления',
+        max_length=150,
+    )
+    recipients = models.ManyToManyField(
+        User,
+        verbose_name='Пользователи',
+        related_name='notifications_recipients'
+    )
+
+    class Meta:
+        db_table = 'notifications_recipients'
+        verbose_name = verbose_name_plural = 'Получатели уведомлений'

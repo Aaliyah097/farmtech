@@ -70,4 +70,8 @@ class InvitesService:
 
         user.save()
 
+        SignUpService.notify_interested_users(
+            f"{invite.company or ''} {invite.last_name or ''} {invite.first_name or ''} {invite.middle_name or ''} {invite.job or ''}".strip(),
+        )
+
         return nonce, None

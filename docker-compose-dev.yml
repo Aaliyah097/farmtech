@@ -27,7 +27,10 @@ services:
     build: .
     environment:
       - POSTGRES_HOST=postgres-farm-tech-db
-    command: celery -A farmtech worker --loglevel=info
+      - REDIS_HOST=redis-farm-tech-cache
+      - REDIS_PASSWORD=change
+      - CELERY_BROKER_URL=redis://:change@redis-farm-tech-cache:6379
+    command: celery -A farmtech worker --loglevel=debug
     volumes:
       - .:/code
     depends_on:
@@ -50,7 +53,7 @@ services:
     env_file:
       - .env
     environment:
-      - CELERY_BROKER_URL=redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}
+      - CELERY_BROKER_URL=redis://:change@redis-farm-tech-cache:6379
       - FLOWER_PORT=5555
     ports:
       - "5555:5555"

@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework import serializers
 from drf_yasg.utils import swagger_auto_schema
 from src.news.models import RequestsForms
-from farmtech.mail_provider import send_email
+from farmtech.mail_provider import send_email, send_email_delay
 
 
 class RequestFormSerializer(serializers.Serializer):
@@ -29,7 +29,7 @@ def send_request_form(request):
     text = serializer.validated_data.get('text')
 
     try:
-        send_email(
+        send_email_delay(
             subject="Новое обращение через форму",
             message=text,
             recipients=[os.environ.get(

@@ -15,3 +15,10 @@ class InvitesRepository(Repository):
             return Invites.objects.get(id=invite_id)
         except Invites.DoesNotExist:
             return None
+
+    @staticmethod
+    def get_by_email(email: str):
+        try:
+            return Invites.objects.get(email=email)
+        except Invites.DoesNotExist:
+            return None

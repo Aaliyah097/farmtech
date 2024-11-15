@@ -15,7 +15,7 @@ class UsersRepository:
     @staticmethod
     def save(email, username, password) -> int:
         try:
-            return User.objects.get(email=email).id
+            return User.objects.get(username=username).id
         except User.DoesNotExist:
             return User.objects.create_user(
                 email=email, username=username, password=password, is_active=False

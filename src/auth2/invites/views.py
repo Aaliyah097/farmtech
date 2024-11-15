@@ -46,5 +46,11 @@ class InvitesView(ModelViewSet):
         payload = self.serializer_class(data=request.data, many=False)
         if not payload.is_valid():
             return Response(status=status.HTTP_401_UNAUTHORIZED, data=payload.errors)
+
+        if InvitesRepository.get_by_email(payload.validated_data['email']):
+            return Response(
+                status=status.HTTP_409_CONFLICT,
+                data=f'Инвайт для такого почтового адреса уже существует'
+            )
         payload.save(user=request.user)
         return Response(status=status.HTTP_201_CREATED, data=payload.data)

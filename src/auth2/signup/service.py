@@ -2,16 +2,28 @@ import os
 import random
 from string import digits
 
-from farmtech.mail_provider import send_email, MessageType
+from farmtech.mail_provider import send_email, send_email_delay, MessageType
 from farmtech.redis_connector import RedisConnector
 from src.auth2.signup.exceptions import InvalidNonceException
 from src.users.users.repo import UsersRepository
+from src.users.notification_recipients.repo import NotificationsRecipientsRepository
 
 
 class SignUpService:
     users_repo = UsersRepository()
     INVITE_CODE_TTL = 60 * 60 * 24 * 3
     PASSWORD_REFRESH_CODE_TTL = 60 * 15
+
+    @staticmethod
+    def notify_interested_users(user_info: str):
+        recipients = NotificationsRecipientsRepository.get_recipients_emails(
+            "new_user_registered")
+        send_email(
+            recipients,
+            user_info,
+            "Регистрация нового пользователя",
+            message_type=MessageType.NEW_USER_REGISTERED
+        )
 
     @staticmethod
     def otp():
@@ -64,6 +76,10 @@ class SignUpService:
             cache.delete(nonce)
 
         self.users_repo.activate_user(user_id)
+
+        user = self.users_repo.get_by_id(user_id)
+
+        self.notify_interested_users(user.fio)
 
     def init_change_password(self, email: str) -> str:
         nonce = self._make_code()
