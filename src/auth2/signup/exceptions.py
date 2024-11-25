@@ -11,3 +11,9 @@ class NotFoundError(APIException):
     status_code = 404
     default_detail = "Сущность не найдена"
     default_code = "Not Found"
+
+
+class NotAuthorizedError(APIException):
+    status_code = 401
+    default_detail = 'Неверные учетные данные'
+    default_code = 'Not Authorized'

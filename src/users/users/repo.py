@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from src.users.models import User
 
 
@@ -40,3 +41,7 @@ class UsersRepository:
         user = User.objects.get(email=email)
         user.set_password(password)
         user.save()
+
+    @staticmethod
+    def get_by_username_and_password(username: str, password: str) -> User | None:
+        return authenticate(username=username, password=password)

@@ -8,6 +8,7 @@ from src.auth2.signup.serializer import (
     ChangePasswordSerializer,
     InitChangePasswordSerializer,
     SignupSerializer,
+    TwoFASerializer
 )
 from src.auth2.signup.service import SignUpService
 
@@ -81,4 +82,24 @@ def confirm_change_password(request):
     )
     return Response(
         status=status.HTTP_200_OK,
+    )
+
+@swagger_auto_schema(
+    method="POST",
+    request_body=TwoFASerializer,
+    responses={
+        202: openapi.Response("Одноразовый код отправлен"),
+    },
+)
+@api_view(("POST",))
+def login_2fa(request):
+    payload = TwoFASerializer(data=request.data)
+    if not payload.is_valid():
+        return Response(status=status.HTTP_400_BAD_REQUEST, data=payload.errors)
+    nonce = SignUpService().login_2fa(
+        payload.validated_data.get("username"), payload.validated_data.get("password")
+    )
+    return Response(
+        status=status.HTTP_200_OK,
+        data=nonce
     )

@@ -17,3 +17,8 @@ class InitChangePasswordSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     nonce = serializers.CharField()
     password = serializers.CharField()
+
+
+class TwoFASerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()

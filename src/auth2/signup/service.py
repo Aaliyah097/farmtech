@@ -4,15 +4,20 @@ from string import digits
 
 from farmtech.mail_provider import send_email, send_email_delay, MessageType
 from farmtech.redis_connector import RedisConnector
-from src.auth2.signup.exceptions import InvalidNonceException
+from src.auth2.signup.exceptions import InvalidNonceException, NotAuthorizedError
 from src.users.users.repo import UsersRepository
 from src.users.notification_recipients.repo import NotificationsRecipientsRepository
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth.models import update_last_login
+
 
 
 class SignUpService:
     users_repo = UsersRepository()
     INVITE_CODE_TTL = 60 * 60 * 24 * 3
     PASSWORD_REFRESH_CODE_TTL = 60 * 15
+    TWO_FA_CODE_TTL = 60 * 15
 
     @staticmethod
     def notify_interested_users(user_info: str):
@@ -100,3 +105,40 @@ class SignUpService:
                 raise InvalidNonceException()
             cache.delete(nonce)
         self.users_repo.change_password(email.decode("utf-8"), password)
+
+    def login_2fa(self, username: str, password: str) -> str:
+        user = self.users_repo.get_by_username_and_password(username, password)
+        if not user:
+            raise NotAuthorizedError()
+        nonce = self._make_code()
+
+        with RedisConnector() as cache:
+            cache.set(nonce, user.id)
+            cache.expire(nonce, self.TWO_FA_CODE_TTL)
+
+        send_email(
+            subject="Подтверждение входа",
+            message=nonce,
+            recipients=[user.email],
+            message_type=MessageType.TWO_FA
+        )
+        
+        return nonce
+    
+    def login_2fa_confirm(self, nonce: str) -> tuple[str, str]:
+        with RedisConnector() as cache:
+            user_id = cache.get(nonce)
+            if not user_id:
+                raise InvalidNonceException()
+            cache.delete(nonce)
+        
+        user = self.users_repo.get_by_id(user_id)
+
+        if not user:
+            raise InvalidNonceException()
+        
+        refresh = TokenObtainPairSerializer.get_token(user)
+
+        update_last_login(None, user)
+
+        return str(refresh), str(refresh.access_token)
