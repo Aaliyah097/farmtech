@@ -1,5 +1,6 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
+from rest_framework_simplejwt.views import TokenObtainPairView
 from src.auth2.signup.two_fa_token_override import TwoFATokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
 
@@ -17,8 +18,9 @@ invites_router.register("invites", InvitesView)
 
 
 urlpatterns = [
+    path('auth2/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth2/login/2fa/', login_2fa, name='login-2fa'),
-    path("auth2/token/", TwoFATokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("auth2/token/", TwoFATokenObtainPairView.as_view(), name="2fa_token_obtain_pair"),
     path("auth2/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("auth2/signup/", signup, name="signup-by-email"),
     path("auth2/signup/confirm/<nonce>", confirm, name="signup-confirm"),
