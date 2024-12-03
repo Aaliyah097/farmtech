@@ -15,8 +15,8 @@ class InvitesService:
         if not invite:
             return None, Error(status=404, data="Приглашение не найдено")
 
-        if invite.status != "new":
-            return None, Error(status=400, data="Приглашение уже рассмотрено")
+        # if invite.status != "new":
+        #     return None, Error(status=400, data="Приглашение уже рассмотрено")
 
         nonce = self.signup_service.signup_user(invite.email, SignUpService.otp())
         invite.status = "confirmed"

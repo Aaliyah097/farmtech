@@ -3,12 +3,9 @@ from src.users.models import User
 from src.reports.models import FinancialReports
 from django.db.utils import IntegrityError
 from django.db import transaction
-from farmtech.settings import DEBUG
 
 
 def repeat_create():
-    if DEBUG:
-        return
     users = User.objects.all()
     today = datetime.date.today()
     for user in users:

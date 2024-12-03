@@ -54,3 +54,14 @@ class InvitesView(ModelViewSet):
             )
         payload.save(user=request.user)
         return Response(status=status.HTTP_201_CREATED, data=payload.data)
+    
+    @action(
+            methods=[
+                "POST",
+            ],
+            detail=True,
+            url_path='resend',
+            parser_classes=(JSONParser, )
+    )
+    def resend(self, request, pk):
+        pass
