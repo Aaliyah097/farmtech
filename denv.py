@@ -65,12 +65,12 @@ class UsersConfig:
                 print(f"Создан новый регион -> {region.name}")
 
     def load_users_phones(self):
-        # Номера телефонов.xlsx
+        # Номера_телефонов.xlsx.xlsx
         """
         Абонентский номер
         ФИО -> (поиск по ФИО, если не находит, то скипаем) (пользователя нельзя создать без почты)
         """
-        wb = openpyxl.load_workbook('Номера телефонов.xlsx')
+        wb = openpyxl.load_workbook('Номера_телефонов.xlsx.xlsx')
         sheet = wb.active
 
         for row in range(5, sheet.max_row):
