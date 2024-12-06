@@ -19,7 +19,7 @@ class MessageType(str, Enum):
     TWO_FA = "two_fa"
 
 
-@shared_task(name='send_email')
+@shared_task(name='send_email_delay')
 def send_email_delay(
     recipients: list[str],
     message: str,
@@ -35,8 +35,24 @@ def send_email_delay(
         message_type
     )
 
-
 def send_email(
+    recipients: list[str],
+    message: str,
+    subject: str,
+    from_email: str = os.environ.get("EMAIL_SENDER"),
+    message_type: MessageType = MessageType.NO_TYPE
+):
+    _send_email.delay(
+        recipients,
+        message,
+        subject,
+        from_email,
+        message_type
+    )
+
+
+@shared_task(name='_send_email')
+def _send_email(
     recipients: list[str],
     message: str,
     subject: str,
