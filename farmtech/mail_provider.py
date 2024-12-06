@@ -1,10 +1,12 @@
 from jinja2 import Template
 from enum import Enum
 import os
+import ssl
 import smtplib
 from email.mime.text import MIMEText
 from email.message import EmailMessage
 from farmtech.settings import DEBUG
+import socket
 
 from celery import shared_task
 
@@ -68,5 +70,17 @@ def send_email(
 
     msg.set_content(template, subtype='html')
 
-    with smtplib.SMTP(os.environ.get("EMAIL_HOST"), int(os.environ.get("EMAIL_PORT"))) as connection:
-        connection.send_message(msg)
+    with smtplib.SMTP(
+        os.environ.get("EMAIL_HOST"), 
+        os.environ.get("EMAIL_PORT"),
+        local_hostname='0.0.0.0'
+    ) as connection:
+        connection.starttls()
+        connection.login(
+            os.environ.get("EMAIL_HOST_DOMAIN") + "\\" + os.environ.get("EMAIL_HOST_USERNAME"), 
+            os.environ.get("EMAIL_HOST_PASSWORD")
+        )
+        try:
+            connection.send_message(msg)
+        except smtplib.SMTPRecipientsRefused:
+            pass

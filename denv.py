@@ -219,7 +219,7 @@ class UsersConfig:
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
                     user = User.objects.create_user(
-                        username=login, email=email, password=SignUpService.otp()
+                        email=email, password=SignUpService.otp()
                     )
                     print(f'Создан новый Пользователь -> {user.email}')
 
