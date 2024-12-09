@@ -37,6 +37,7 @@ from src.news.models import *
 from src.meetings.models import *
 from src.auth2.models import *
 from src.auth2.signup.service import SignUpService
+from src.users.users.repo import UsersRepository
 
 
 class UsersConfig:
@@ -50,6 +51,20 @@ class UsersConfig:
         self.load_user_departments_cities()
         self.load_users_employment_date__jobs__departments()
         self.load_users_phones()
+
+    def email_to_lowercase(self):
+        users = User.objects.all()
+        print(f'users -> {users.count()}')
+        for user in users:
+            user_email = UsersRepository.validate_email(user.email)
+            if user_email != user.email:
+                ex_users = User.objects.filter(email__iexact=user_email)
+                if ex_users.count() > 1:
+                    user.delete()
+                    print(f"duplicate -> {ex_users}")
+                    continue
+                user.email = user_email
+                user.save()
 
     def load_regions(self):
         # Регионы_корректно.xlsx
@@ -357,8 +372,4 @@ class NewsConfig:
 
 
 if __name__ == '__main__':
-    users_config = UsersConfig()
-    users_config.ready()
-
-    news_config = NewsConfig()
-    news_config.ready()
+    c = UsersConfig()

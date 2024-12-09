@@ -4,6 +4,10 @@ from src.users.models import User
 
 class UsersRepository:
     @staticmethod
+    def validate_email(email: str) -> str:
+        return str(email).lower()
+
+    @staticmethod
     def get_qs():
         return User.objects.all()
 
@@ -15,6 +19,7 @@ class UsersRepository:
 
     @staticmethod
     def save(email, username, password) -> int:
+        email = UsersRepository.validate_email(email)
         try:
             return User.objects.get(email=email).id
         except User.DoesNotExist:
@@ -24,6 +29,7 @@ class UsersRepository:
 
     @staticmethod
     def get_by_email(email: str):
+        email = UsersRepository.validate_email(email)
         try:
             return User.objects.get(email=email)
         except User.DoesNotExist:
@@ -38,10 +44,12 @@ class UsersRepository:
 
     @staticmethod
     def change_password(email: str, password: str):
+        email = UsersRepository.validate_email(email)
         user = User.objects.get(email=email)
         user.set_password(password)
         user.save()
 
     @staticmethod
     def get_by_username_and_password(username: str, password: str) -> User | None:
+        username = UsersRepository.validate_email(username)
         return authenticate(username=username, password=password)

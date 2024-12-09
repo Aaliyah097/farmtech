@@ -12,6 +12,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = [
         "company",
     ]
+    search_fields = ['email', ]
 
 
 @admin.register(Departments)
