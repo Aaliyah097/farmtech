@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "10.0.1.11"]
+ALLOWED_HOSTS = ["127.0.0.1", "0.0.0.0", "10.0.1.11", 'vks.pharmtec.ru']
 
 
 # Application definition
